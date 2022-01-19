@@ -22,5 +22,6 @@ from mysite import views
 # example.com/
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', views.index)
+    path('', views.index),
+    path('blog/', include('blog.urls'))
 ]

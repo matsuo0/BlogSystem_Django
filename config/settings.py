@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'livereload', # livereload
     'django.contrib.staticfiles',
     'mysite',
+    'blog',
 ]
 
 MIDDLEWARE = [
