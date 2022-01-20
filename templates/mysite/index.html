@@ -55,12 +55,16 @@
                 Django Lesson
             </h3>
             {{ articles.0.title }}
+            {% for obj in articles %}
             <div class="blog-post">
-                <h2 class="blog-post-title">サンプル</h2>
-                <p class="blog-post-meta">2014/01/01 by
-                    <a href="#">ふじサン</a>
+                <h2 class="blog-post-title">{{ obj.title }}</h2>
+                <p class="blog-post-meta">{{ obj.created_at }} by
+                    <a href="#">{{ obj.author }}</a>
+                <p> {{ obj.text }}</p>
                 </p>
             </div>
+            {% endfor %}
+
             <nav class="blog-pagination">
                 <a class="btn btn-outline-primary" href="#">古い記事</a>
                 <a class="btn btn-outline-primary disabled" href="#">新しい記事</a>
