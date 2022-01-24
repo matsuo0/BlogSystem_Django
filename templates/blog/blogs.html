@@ -15,7 +15,7 @@
                 Django Lesson
             </h3>
 
-            {% for obj in articles %}
+            {% for obj in page_obj %}
             <div class="blog-post">
                 <h2 class="blog-post-title">{{ obj.title }}</h2>
                 <p class="blog-post-meta">{{ obj.created_at }} by
