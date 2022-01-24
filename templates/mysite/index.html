@@ -54,15 +54,16 @@
             <h3 class="pb-4 font-italic border-bottom">
                 Django Lesson
             </h3>
-            {{ articles.0.title }}
+
             {% for obj in articles %}
             <div class="blog-post">
                 <h2 class="blog-post-title">{{ obj.title }}</h2>
                 <p class="blog-post-meta">{{ obj.created_at }} by
                     <a href="#">{{ obj.author }}</a>
                 <p> {{ obj.text }}</p>
-                </p>
+                <a href="/blog/{{ obj.id }}" class="stretched-link">続きはこちら</a>
             </div>
+            <hr>
             {% endfor %}
 
             <nav class="blog-pagination">
