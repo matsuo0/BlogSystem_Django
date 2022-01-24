@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     #path('/', views.test),
-    path('article/', views.article)
+    path('<slug:pk>/', views.article)
 ]
