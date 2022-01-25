@@ -19,17 +19,34 @@
             <div class="blog-post">
                 <h2 class="blog-post-title">{{ obj.title }}</h2>
                 <p class="blog-post-meta">{{ obj.created_at }} by
-                    <a href="#">{{ obj.author }}</a>
+                    <a href="#">{{ obj.author }} </a>
                 <p> {{ obj.text }}</p>
-                <a href="/blog/{{ obj.id }}" class="stretched-link">続きはこちら</a>
+                <a href="/blog/{{ obj.id }}" class="">続きはこちら</a>
             </div>
             <hr>
             {% endfor %}
 
             <nav class="blog-pagination">
-                <a class="btn btn-outline-primary" href="#">古い記事</a>
-                <a class="btn btn-outline-primary disabled" href="#">新しい記事</a>
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-outline-primary" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+
+<!--                        <span class="current">-->
+<!--                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.-->
+<!--                        </span>-->
+
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
             </nav>
+
+
         </div>
         <aside class="col-md-4">
             <div class="p-4 mb-3 bg-light rounded">
@@ -41,6 +58,7 @@
         </aside>
     </div>
 </main>
+
 
 
 {% endblock %}
