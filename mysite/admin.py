@@ -3,6 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from mysite.models import User
 
+from mysite.forms import UserCreationForm  # adminでuser作成用に追加
+
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -32,6 +34,8 @@ class CustomUserAdmin(UserAdmin):
     )
     # --- adminでuser作成用に追加 ---
 
+    add_form = UserCreationForm # adminでuser作成用に追加
 
-admin.site.unregister(Group) # 表示されないように
+
+admin.site.unregister(Group)  # 表示されないように
 admin.site.register(User, CustomUserAdmin)
