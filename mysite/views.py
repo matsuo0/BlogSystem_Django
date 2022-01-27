@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from blog.models import Article
 from django.contrib.auth.views import LoginView
 from mysite.forms import UserCreationForm
+from django.contrib import messages
 
 
 def index(request):
@@ -24,6 +25,14 @@ def index(request):
 class Login(LoginView):
     template_name = 'mysite/auth.html'
 
+    def form_valid(self, form):
+        messages.success(self.request, 'ログイン完了')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'エラーあり！')
+        return super().form_invalid(form)
+
 
 def signup(request):
     context = {}
@@ -31,6 +40,8 @@ def signup(request):
         form = UserCreationForm(request.POST)  # 今回はパスワード、メールアドレスをValidationだったり、パスワードハッシュ化目的
         if form.is_valid():
             user = form.save(commit=False)
-            #user.is_active = False  # 初期状態はTrueだが、メールの検証が必要なるためFalseと定義する
+            # user.is_active = False  # 初期状態はTrueだが、メールの検証が必要なるためFalseと定義する
             user.save()
+            messages.success(request, '登録完了')
+            return redirect('/')
     return render(request, 'mysite/auth.html', context)
