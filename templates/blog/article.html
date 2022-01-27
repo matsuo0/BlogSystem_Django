@@ -17,6 +17,10 @@
             </h3>
             <p class="small text-muted text-end">{{ article.created_at}} {{ article.author }}</p>
             <p>{{ article.text }}</p>
+
+            <hr class="my-4">
+            {% include 'mysite/snippets/comment.html'%}
+
         </div>
 
         {% include 'mysite/snippets/sidebar.html' %}
