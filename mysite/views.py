@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from blog.models import Article
 from django.contrib.auth.views import LoginView
-from mysite.forms import UserCreationForm
+from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
 
 
@@ -49,4 +49,10 @@ def signup(request):
 
 def mypage(request):
     context = {}
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
     return render(request, 'mysite/mypage.html', context)
