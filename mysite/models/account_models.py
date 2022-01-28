@@ -68,7 +68,7 @@ from django.dispatch import receiver
 
 @receiver(post_save, sender=User)  # Receiverをつかって、ユーザーが生成されたときに、Profileを生成するため
 def create_onetoone(sender, **kwargs):
-    if kwargs['create']:
+    if kwargs['created']:
         from mysite.models.profile_models import Profile
         Profile.objects.create(user=kwargs['instance'])
 # --- OneToOneField を同時に作成 ---
