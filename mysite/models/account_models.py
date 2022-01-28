@@ -61,3 +61,14 @@ class User(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
+# --- OneToOneField を同時に作成 ---
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+@receiver(post_save, sender=User)  # Receiverをつかって、ユーザーが生成されたときに、Profileを生成するため
+def create_onetoone(sender, **kwargs):
+    if kwargs['create']:
+        from mysite.models.profile_models import Profile
+        Profile.objects.create(user=kwargs['instance'])
+# --- OneToOneField を同時に作成 ---
