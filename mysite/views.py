@@ -55,4 +55,5 @@ def mypage(request):
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
+            messages.success(request, '送信完了')
     return render(request, 'mysite/mypage.html', context)
