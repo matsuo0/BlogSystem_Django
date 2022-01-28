@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from blog.models import Article, Comment
 from django.core.paginator import Paginator
+from blog.forms import CommentForm
 
 
 def index(request):
@@ -17,9 +18,16 @@ def index(request):
 
 def article(request, pk):
     obj = Article.objects.get(pk=pk)
-    comments = Comment.objects.filter(article = obj)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user # リクエストしている人がそのままユーザー
+            comment.article = obj
+            comment.save()
+    comments = Comment.objects.filter(article=obj)
     context = {
         'article': obj,
-        'comments' : comments,
+        'comments': comments,
     }
     return render(request, 'blog/article.html', context)
