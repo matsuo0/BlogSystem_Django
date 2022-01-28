@@ -12,6 +12,6 @@ class Profile(models.Model):
 
     prefecture = models.CharField(default="", max_length=6)
 
-    city = models.CharField(defalut="", max_length=100)
+    city = models.CharField(default="", max_length=100)
 
     address = models.CharField(default="", max_length=200)
