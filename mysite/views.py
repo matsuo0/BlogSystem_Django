@@ -3,7 +3,8 @@ from blog.models import Article
 from django.contrib.auth.views import LoginView
 from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 def index(request):
     objs = Article.objects.all()[:3]  # 全ての記事を取得
@@ -42,11 +43,15 @@ def signup(request):
             user = form.save(commit=False)
             # user.is_active = False  # 初期状態はTrueだが、メールの検証が必要なるためFalseと定義する
             user.save()
+
+            # ログインさせる
+            login(request, user)
             messages.success(request, '登録完了')
             return redirect('/')
     return render(request, 'mysite/auth.html', context)
 
 
+@login_required
 def mypage(request):
     context = {}
     if request.method == 'POST':
