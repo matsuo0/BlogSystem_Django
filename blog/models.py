@@ -2,6 +2,16 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 
+class Tag(models.Model):
+    slug = models.CharField(primary_key=True, unique=True, max_length=20)
+    # URL上に表示しやすいように
+
+    name = models.CharField(unique=True, max_length=20)
+
+    def __str__(self):
+        return self.slug
+
+
 class Article(models.Model):
     title = models.CharField(default='', max_length=30)
 
@@ -14,6 +24,8 @@ class Article(models.Model):
     updated_at = models.DateField(auto_now=True)
 
     count = models.IntegerField(default=0)
+
+    tags = models.ManyToManyField(Tag, blank=True)
 
 
 class Comment(models.Model):
