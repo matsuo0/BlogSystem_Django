@@ -13,6 +13,8 @@ class Article(models.Model):
 
     updated_at = models.DateField(auto_now=True)
 
+    count = models.IntegerField(default=0)
+
 
 class Comment(models.Model):
     comment = models.TextField(default="", max_length=500)
