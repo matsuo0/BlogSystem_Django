@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from blog.models import Article, Comment
+from blog.models import Article, Comment, Tag
 from django.core.paginator import Paginator
 from blog.forms import CommentForm
 
@@ -10,6 +10,7 @@ def index(request):
     paginator = Paginator(objs, 2)  # 1ページに表示する記事数 2
     page_number = request.GET.get('page')
     context = {
+        'page_title': 'ブログ一覧',
         'page_obj': paginator.get_page(page_number),
         'page_number': page_number,
     }
@@ -26,7 +27,7 @@ def article(request, pk):
             form = CommentForm(request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
-                comment.user = request.user # リクエストしている人がそのままユーザー
+                comment.user = request.user  # リクエストしている人がそのままユーザー
                 comment.article = obj
                 comment.save()
     comments = Comment.objects.filter(article=obj)
@@ -35,3 +36,19 @@ def article(request, pk):
         'comments': comments,
     }
     return render(request, 'blog/article.html', context)
+
+
+def tags(request, slug):
+    tag = Tag.object.get(slug=slug)
+
+    # 逆参照(tagからarticleを呼び出す)
+    objs = tag.article_set.all()
+    paginator = Paginator(objs, 10)  # 1ページに表示する記事数 2
+    page_number = request.GET.get('page')
+    context = {
+        'page_title': '記事一覧　#{}'.format(slug),
+        'page_obj': paginator.get_page(page_number),
+        'page_number': page_number,
+    }
+    return render(request, 'blog/blogs.html', context)
+    # blogsと同じものを表示すればよいので、blogs.htmlを呼び出す、templeteを２つ作る必要がないため

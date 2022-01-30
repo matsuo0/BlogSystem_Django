@@ -18,10 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from mysite import views
+# from blog import views as b_view
 from django.contrib.auth.views import LogoutView
 
 
 # example.com/
+# 上か順に呼ばれることに気をつけること
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
