@@ -6,11 +6,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 
+
 def index(request):
+    ranks = Article.objects.order_by('-count')[:2] # -をつけることで降順
     objs = Article.objects.all()[:3]  # 全ての記事を取得
     context = {
         'title': 'Really Site',
         'articles': objs,
+        'ranks' : ranks,
     }
     return render(request, 'mysite/index.html', context)
 
