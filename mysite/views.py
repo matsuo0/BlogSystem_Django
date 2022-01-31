@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render, redirect
 from blog.models import Article
 from django.contrib.auth.views import LoginView
@@ -5,7 +7,7 @@ from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-
+from django.core.mail import send_mail
 
 def index(request):
     ranks = Article.objects.order_by('-count')[:2] # -をつけることで降順
@@ -68,4 +70,15 @@ def mypage(request):
 
 def contact(request):
     context = {}
+    if request.method == "POST":
+        # --- email ---
+        subject = 'お問合せがありました。'
+        message = """お問合せがありました。 \n名前: {}\n メールアドレス: {}\n内容: {}""".format(
+            request.POST.get('name'),
+            request.POST.get('email'),
+            request.POST.get('content'))
+        email_from = os.environ['DEFAULT_EMAIL_FROM']
+        email_to = [os.environ['DEFAULT_EMAIL_FROM']]
+        send_mail(subject, message, email_from, email_to)
+        # --- email ---
     return render(request, 'mysite/contact.html', context)

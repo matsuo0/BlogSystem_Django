@@ -29,10 +29,16 @@ ALLOWED_HOSTS = ['*']
 
 import yaml
 
-with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
-    obj = yaml.safe_load(file)
-    os.environ['password'] = obj['password']
-    # print('---- ', os.environ['password'])
+if DEBUG:
+    # 開発環境
+    with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
+        objs = yaml.safe_load(file)
+        for obj in objs:
+            os.environ[obj] = objs[obj]
+        # print('---- ', os.environ['password'])
+else:
+    # 本番環境
+    pass
 
 # Application definition
 
@@ -155,3 +161,13 @@ MESSAGE_TAGS = {
     messages.DEBUG: 'rounded-0 alert alert-secondary',
 }
 # -------- message tab with bootstrap alert class --------
+
+
+# --- Gmail 送信設定 ---
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+# --- Gmail 送信設定 ---
