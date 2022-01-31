@@ -65,3 +65,7 @@ def mypage(request):
             profile.save()
             messages.success(request, '送信完了')
     return render(request, 'mysite/mypage.html', context)
+
+def contact(request):
+    context = {}
+    return render(request, 'mysite/contact.html', context)
