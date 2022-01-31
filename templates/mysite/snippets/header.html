@@ -19,13 +19,11 @@
             <a class="p-2 link-secondary" href="/blog/">ブログ</a>
             <a class="p-2 link-secondary" href="/contact/">お問い合わせ</a>
 
-
             {% if user.is_authenticated %}
                 <div>
                     <a class="p-2 link-secondary" href="/logout/">ログアウト</a>
                     <a class="p-2 link-secondary" href="/mypage/">マイページ</a>
                 </div>
-
             {% else %}
                 <div>
                     <a class="p-2 link-secondary" href="/logout/">ログイン</a>

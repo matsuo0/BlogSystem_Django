@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+import yaml
+
+with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
+    obj = yaml.safe_load(file)
+    os.environ['password'] = obj['password']
+    # print('---- ', os.environ['password'])
+
 # Application definition
 
 INSTALLED_APPS = [
