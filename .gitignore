@@ -1,6 +1,7 @@
-secrets
+secrets/secret_dev.yaml
 *.log
 *.pyc
 __pycache__/
 db-volumes/
 db.sqlite3
+/secrets/
