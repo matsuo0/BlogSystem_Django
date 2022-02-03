@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-zo2+h1hti75pbjpwbgrz(bigvo^&!_c81i49j&k-4dl$0zjsll
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-if os.getenv['GAE_APPLICATION', None]:
+if os.getenv('GAE_APPLICATION', None):
     # GAE 本番環境
     ALLOWED_HOSTS = ['really-site-337303.an.r.appspot.com', ]
     pass
@@ -87,15 +87,37 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('GAE_APPLICATION', None):
+    # GAE 本番環境
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USERNAME'],
+            'PASSWORD': os.environ['DB_USERPASS'],
+            'HOST': '/cloudsql/{}'.format(os.environ['DB_CONNECTION']),
+        }
     }
-}
+else:
+    # 開発環境
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USERNAME'],
+            'PASSWORD': os.environ['DB_USERPASS'],
+            'HOST': '127.0.0.1',
+            'PORT': '3306'
+        }
+    }
+
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    #     }
+    # }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
