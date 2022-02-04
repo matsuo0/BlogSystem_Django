@@ -69,7 +69,9 @@ def mypage(request):
     return render(request, 'mysite/mypage.html', context)
 
 def contact(request):
-    context = {}
+    context = {
+        'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY'],
+    }
     if request.method == "POST":
         # --- email ---
         subject = 'お問合せがありました。'

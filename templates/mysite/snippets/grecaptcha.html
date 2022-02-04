@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <div class="g-recaptcha"
+         data-callback="verifyCallback"
+         data-sitekey="{{ grecaptcha_sitekey }}"></div>
+    <script>
+        // コールバック関数の
+        function verifyCallback(response){
+            // console.log(response); トークンが返ってくることを確認
+            // submit の disable属性を解除
+            document.getElementById('submit').disabled = false;
+        }
+    </script>
+</body>
+</html>
