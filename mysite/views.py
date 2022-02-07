@@ -62,7 +62,9 @@ def mypage(request):
     context = {}
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
+        # print('is_validの手前です')
         if form.is_valid():
+            # print('is_validの中です')
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
