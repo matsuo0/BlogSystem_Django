@@ -9,13 +9,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.core.mail import send_mail
 
+
 def index(request):
-    ranks = Article.objects.order_by('-count')[:2] # -をつけることで降順
+    ranks = Article.objects.order_by('-count')[:2]  # -をつけることで降順
     objs = Article.objects.all()[:3]  # 全ての記事を取得
     context = {
         'title': 'Really Site',
         'articles': objs,
-        'ranks' : ranks,
+        'ranks': ranks,
     }
     return render(request, 'mysite/index.html', context)
 
@@ -60,13 +61,14 @@ def signup(request):
 def mypage(request):
     context = {}
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
             messages.success(request, '送信完了')
     return render(request, 'mysite/mypage.html', context)
+
 
 def contact(request):
     context = {
@@ -90,6 +92,7 @@ def contact(request):
         # --- email ---
     return render(request, 'mysite/contact.html', context)
 
+
 def grecaptcha_request(token):
     from urllib import request, parse
     import json, ssl
@@ -97,7 +100,7 @@ def grecaptcha_request(token):
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 
     url = "https://www.google.com/recaptcha/api/siteverify"
-    headers = { 'content-type': 'application/x-www-form-urlencoded' }
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
     data = {
         'secret': os.environ['GRECAPTCHA_SECRETKEY'],
         'response': token,
