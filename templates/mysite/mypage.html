@@ -24,6 +24,10 @@
             <form class="row g-3" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
+<!--                https://storage.cloud.google.com/really-site-337303/{{ user.profile.image }}-->
+<!--                https://storage.googleapis.com/really-site-337303/image/1/DSC_0608.JPG-->
+                <img src="https://storage.googleapis.com/really-site-337303/{{ user.profile.image }}" class="w-25 h-25">
+
                 <input type="file" accept="image/*" id="id_image" name="image">
 
                 <div class="col-12">
