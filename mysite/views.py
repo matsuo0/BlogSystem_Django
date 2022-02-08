@@ -1,13 +1,13 @@
 import os
 
-from django.shortcuts import render, redirect
-from blog.models import Article
-from django.contrib.auth.views import LoginView
-from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+
+from blog.models import Article
+from mysite.forms import UserCreationForm, ProfileForm
 
 
 def index(request):
@@ -57,42 +57,89 @@ def signup(request):
     return render(request, 'mysite/auth.html', context)
 
 
-@login_required
-def mypage(request):
-    context = {}
-    if request.method == 'POST':
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class MypageView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        return render(request, 'mysite/mypage.html', context)
+
+    def post(self, request):
+        context = {}
         form = ProfileForm(request.POST, request.FILES)
-        # print('is_validの手前です')
         if form.is_valid():
-            # print('is_validの中です')
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
             messages.success(request, '送信完了')
-    return render(request, 'mysite/mypage.html', context)
 
 
-def contact(request):
+# @login_required
+# def mypage(request):
+#     context = {}
+#     if request.method == 'POST':
+#         form = ProfileForm(request.POST, request.FILES)
+#         # print('is_validの手前です')
+#         if form.is_valid():
+#             # print('is_validの中です')
+#             profile = form.save(commit=False)
+#             profile.user = request.user
+#             profile.save()
+#             messages.success(request, '送信完了')
+#     return render(request, 'mysite/mypage.html', context)
+
+
+class ContactView(View):
     context = {
         'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY'],
     }
-    if request.method == "POST":
-        recaptcha_token = request.POST.get("g-recaptcha-response")
-        res = grecaptcha_request(recaptcha_token)
-        if not res:
-            messages.error(request, 'reCAPTCHAに失敗したようです。')
-            render(request, 'mysite/contact.html', context)
-        # --- email to me ---
-        subject = 'お問合せがありました。'
-        message = """お問合せがありました。 \n名前: {}\n メールアドレス: {}\n内容: {}""".format(
-            request.POST.get('name'),
-            request.POST.get('email'),
-            request.POST.get('content'))
-        email_from = os.environ['DEFAULT_EMAIL_FROM']
-        email_to = [os.environ['DEFAULT_EMAIL_FROM']]
-        send_mail(subject, message, email_from, email_to)
-        # --- email ---
-    return render(request, 'mysite/contact.html', context)
+    def get(self, request):
+        return render(request, 'mysite/contact.html', self.context)
+
+    def post(self, request):
+        if request.method == "POST":
+            recaptcha_token = request.POST.get("g-recaptcha-response")
+            res = grecaptcha_request(recaptcha_token)
+            if not res:
+                messages.error(request, 'reCAPTCHAに失敗したようです。')
+                render(request, 'mysite/contact.html', self.context)
+            # --- email to me ---
+            subject = 'お問合せがありました。'
+            message = """お問合せがありました。 \n名前: {}\n メールアドレス: {}\n内容: {}""".format(
+                request.POST.get('name'),
+                request.POST.get('email'),
+                request.POST.get('content'))
+            email_from = os.environ['DEFAULT_EMAIL_FROM']
+            email_to = [os.environ['DEFAULT_EMAIL_FROM']]
+            send_mail(subject, message, email_from, email_to)
+            # --- email ---
+        return render(request, 'mysite/contact.html', self.context)
+
+
+# def contact(request):
+#     context = {
+#         'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY'],
+#     }
+#     if request.method == "POST":
+#         recaptcha_token = request.POST.get("g-recaptcha-response")
+#         res = grecaptcha_request(recaptcha_token)
+#         if not res:
+#             messages.error(request, 'reCAPTCHAに失敗したようです。')
+#             render(request, 'mysite/contact.html', context)
+#         # --- email to me ---
+#         subject = 'お問合せがありました。'
+#         message = """お問合せがありました。 \n名前: {}\n メールアドレス: {}\n内容: {}""".format(
+#             request.POST.get('name'),
+#             request.POST.get('email'),
+#             request.POST.get('content'))
+#         email_from = os.environ['DEFAULT_EMAIL_FROM']
+#         email_to = [os.environ['DEFAULT_EMAIL_FROM']]
+#         send_mail(subject, message, email_from, email_to)
+#         # --- email ---
+#     return render(request, 'mysite/contact.html', context)
 
 
 def grecaptcha_request(token):
