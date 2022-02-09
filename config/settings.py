@@ -100,6 +100,7 @@ if os.getenv('GAE_APPLICATION', None):
     }
 else:
     # 開発環境
+    '''
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -110,13 +111,14 @@ else:
             'PORT': '3306'
         }
     }
+    '''
 
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #     }
-    # }
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -209,3 +211,11 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 # --- Gmail 送信設定 ---
+
+# --- DBキャッシュ設定 ---
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+    }
+}

@@ -36,4 +36,5 @@ urlpatterns = [
     # path('contact/', views.contact),
     path('contact/', views.ContactView.as_view()),
     path('pay/', views.PayView.as_view()),
+    # path('cache_test/', views.cache_test),
 ]
