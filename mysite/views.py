@@ -178,6 +178,7 @@ def grecaptcha_request(token):
 import payjp
 
 class PayView(View):
+    payjp.api_key =os.environ['PAYJP_SECRET_KEY']
     public_key = os.environ['PAYJP_PUBLIC_KEY']
     amount = 1000
 
@@ -204,4 +205,4 @@ class PayView(View):
             'public_key': self.public_key,
             'charge': charge
         }
-        return render(request, 'mysite/pay.thml', context)
+        return render(request, 'mysite/pay.html', context)
