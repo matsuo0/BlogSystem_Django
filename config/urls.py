@@ -21,6 +21,9 @@ from mysite import views
 # from blog import views as b_view
 from django.contrib.auth.views import LogoutView
 
+# ページ単位でキャッシュ
+# from django.views.decorators.cache import cache_page
+
 
 # example.com/
 # 上か順に呼ばれることに気をつけること
@@ -36,5 +39,5 @@ urlpatterns = [
     # path('contact/', views.contact),
     path('contact/', views.ContactView.as_view()),
     path('pay/', views.PayView.as_view()),
-    # path('cache_test/', views.cache_test),
+    #path('cache_test/', cache_page(30)(views.cache_test)),
 ]

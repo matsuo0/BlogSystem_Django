@@ -52,3 +52,19 @@ def tags(request, slug):
     }
     return render(request, 'blog/blogs.html', context)
     # blogsと同じものを表示すればよいので、blogs.htmlを呼び出す、templeteを２つ作る必要がないため
+
+
+# JavaScriptの非同期通信用
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+
+
+@ensure_csrf_cookie
+def like(request, pk):
+    d = {"message": "error"}
+    if request.method == 'POST':
+        obj = Article.objects.get(pk=pk)
+        obj.count += 1
+        obj.save()
+        d["message"] = "success"
+    return JsonResponse(d)
