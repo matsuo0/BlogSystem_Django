@@ -39,7 +39,7 @@ def article(request, pk):
 
 
 def tags(request, slug):
-    tag = Tag.object.get(slug=slug)
+    tag = Tag.objects.get(slug=slug)
 
     # 逆参照(tagからarticleを呼び出す)
     objs = tag.article_set.all()
