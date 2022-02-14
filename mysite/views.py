@@ -10,6 +10,10 @@ from blog.models import Article
 from mysite.forms import UserCreationForm, ProfileForm
 
 
+def landing(request):
+    context = {}
+    return render(request, 'mysite/landing.html', context)
+
 def index(request):
     ranks = Article.objects.order_by('-count')[:2]  # -をつけることで降順
     objs = Article.objects.all()[:3]  # 全ての記事を取得
