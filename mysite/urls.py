@@ -3,9 +3,11 @@ from django.urls import path
 from django.contrib.auth.views import LogoutView
 from mysite import views
 
+app_name = "mysite"
+
 urlpatterns = [
-    path('', views.index),
-    path('login/', views.Login.as_view()),
+    path('', views.index, name="home"),
+    path('login/', views.Login.as_view(), name="login"),
     path('logout/', LogoutView.as_view()),
     path('signup/', views.signup),
     path('mypage/', views.MypageView.as_view()),
@@ -14,4 +16,6 @@ urlpatterns = [
     path('landing/', views.landing),
 
     # path('cache_test/', cache_page(30)(views.cache_test)),
+
+    path('ping/', views.ping)
 ]

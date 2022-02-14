@@ -30,6 +30,7 @@ else:
     DEBUG = True
     ALLOWED_HOSTS = ['*']
     import yaml
+
     with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
         objs = yaml.safe_load(file)
         for obj in objs:
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'livereload',  # livereload
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',  # for サイトマップ
     'mysite',
     'blog',
 ]
@@ -120,7 +122,6 @@ else:
         }
     }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -165,6 +166,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # --- GCSの設定
 from google.oauth2 import service_account
+
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
     os.path.join(BASE_DIR, 'secrets', os.environ['GCS_CREDENTIALS_FILENAME'])
 )

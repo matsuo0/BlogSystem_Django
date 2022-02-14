@@ -18,9 +18,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.contrib.sitemaps.views import sitemap
+from config.sitemaps import StaticeViewSitemap, BlogSitemap
+
 # ページ単位でキャッシュ
 # from django.views.decorators.cache import cache_page
 
+sitemaps = {
+    "static": StaticeViewSitemap,
+    "blog": BlogSitemap,
+}
 
 # example.com/
 # 上か順に呼ばれることに気をつけること
@@ -28,4 +35,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
     path('', include('mysite.urls')),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+        name="django.contrib.sitemaps.views.sitemap")
 ]

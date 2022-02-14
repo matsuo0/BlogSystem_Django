@@ -9,10 +9,24 @@ from django.shortcuts import render, redirect
 from blog.models import Article
 from mysite.forms import UserCreationForm, ProfileForm
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.sitemaps import ping_google
+
+
+@login_required
+def ping(request):
+    try:
+        if request.user.is_admin:
+            ping_google()
+    except:
+        pass
+    return redirect('/')
+
 
 def landing(request):
     context = {}
     return render(request, 'mysite/landing.html', context)
+
 
 def index(request):
     ranks = Article.objects.order_by('-count')[:2]  # -をつけることで降順
@@ -100,6 +114,7 @@ class ContactView(View):
     context = {
         'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY'],
     }
+
     def get(self, request):
         return render(request, 'mysite/contact.html', self.context)
 
@@ -177,12 +192,14 @@ def grecaptcha_request(token):
 
     return response['success']
 
+
 # FlaskをベースにDjangoにも同様の処理を入れていく
 # https://pay.jp/docs/flask-checkout
 import payjp
 
+
 class PayView(View):
-    payjp.api_key =os.environ['PAYJP_SECRET_KEY']
+    payjp.api_key = os.environ['PAYJP_SECRET_KEY']
     public_key = os.environ['PAYJP_PUBLIC_KEY']
     amount = 1000
 
